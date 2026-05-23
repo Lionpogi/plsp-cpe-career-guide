@@ -2,14 +2,54 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
 
 export default function HeroAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [studentId, setStudentId] = useState('');
+  const [securityKey, setSecurityKey] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  // Validates the precise XX-XXXXX layout constraint
+  const validateStudentId = (id: string) => {
+    const plspRegex = /^\d{2}-\d{5}$/;
+    return plspRegex.test(id.trim());
+  };
+
+  // Automatically applies the dash as the student types digits
+  const handleIdInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawInput = e.target.value.replace(/\D/g, ''); // Extract digits only
+    
+    let formattedValue = rawInput;
+    if (rawInput.length > 2) {
+      formattedValue = `${rawInput.slice(0, 2)}-${rawInput.slice(2, 7)}`;
+    }
+    
+    setStudentId(formattedValue);
+  };
 
   const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    // 1. Structural Sanity Validations
+    if (!studentId.trim() || !securityKey.trim()) {
+      setError("Transmission failed: All authorization vectors required.");
+      return;
+    }
+
+    if (!validateStudentId(studentId)) {
+      setError("Invalid Protocol: Student ID must conform to 'XX-XXXXX' format (e.g., 23-15157).");
+      return;
+    }
+
+    if (securityKey.length < 6) {
+      setError("Access Denied: Security keys must meet minimum 6-character length.");
+      return;
+    }
+
+    // 2. Route payload processing on successfully cleared checks
     router.push('/dashboard');
   };
 
@@ -60,26 +100,50 @@ export default function HeroAuthPage() {
             </h3>
             
             <form onSubmit={handleAuth} className="space-y-4 text-left">
-              <input 
-                type="text" 
-                placeholder="STUDENT ID (2024-XXXXX-SP)"
-                className="w-full bg-[#1e3a8a] border-4 border-white/10 rounded-2xl p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-sm"
-              />
-              <input 
-                type="password" 
-                placeholder="SECURITY KEY"
-                className="w-full bg-[#1e3a8a] border-4 border-white/10 rounded-2xl p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-sm"
-              />
+              {/* Dynamic Error Feedback UI Node */}
+              {error && (
+                <div className="bg-red-500/20 border-2 border-red-500 rounded-xl p-4 flex items-start gap-3 text-red-200 text-xs font-bold leading-normal animate-in fade-in zoom-in-95 duration-200">
+                  <AlertCircle size={16} className="shrink-0 mt-0.5 text-red-400" />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              <div>
+                <label className="text-[9px] font-black uppercase tracking-widest text-blue-300 block mb-1.5 ml-2">University Matrix ID</label>
+                <input 
+                  type="text" 
+                  value={studentId}
+                  onChange={handleIdInput}
+                  maxLength={8} // 7 digits + 1 dash
+                  placeholder="23-15157"
+                  className="w-full bg-[#1e3a8a] border-4 border-white/10 rounded-2xl p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-sm tracking-widest"
+                />
+              </div>
+
+              <div>
+                <label className="text-[9px] font-black uppercase tracking-widest text-blue-300 block mb-1.5 ml-2">Security Credential Token</label>
+                <input 
+                  type="password" 
+                  value={securityKey}
+                  onChange={(e) => setSecurityKey(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full bg-[#1e3a8a] border-4 border-white/10 rounded-2xl p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-sm"
+                />
+              </div>
+
               <button 
                 type="submit"
-                className="w-full bg-[#f97316] text-[#1e3a8a] py-4 rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
+                className="w-full bg-[#f97316] text-[#1e3a8a] py-4 rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2"
               >
                 BEGIN EXPLORING <ArrowRight size={20} />
               </button>
             </form>
 
             <button 
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setError(null);
+              }}
               className="mt-6 text-[10px] font-black uppercase tracking-widest text-blue-300 hover:text-[#f97316] transition-colors"
             >
               {isLogin ? "✓ EXCLUSIVE FOR PLSP CPE STUDENTS" : "ALREADY HAVE AN ACCOUNT? LOGIN"}
@@ -87,7 +151,7 @@ export default function HeroAuthPage() {
           </div>
         </div>
 
-        {/* BOTTOM STATS BOX (From your image) */}
+        {/* BOTTOM STATS BOX */}
         <div className="w-full max-w-3xl bg-[#f97316] rounded-[2.5rem] p-8 flex flex-wrap justify-around items-center gap-6 shadow-2xl border-b-[8px] border-[#162e70]">
           <div className="text-center">
             <p className="text-4xl font-black text-[#1e3a8a]">2028</p>

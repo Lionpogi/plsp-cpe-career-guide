@@ -84,7 +84,7 @@ export default function ContactPage() {
             <div className="space-y-4">
               <h3 className="text-xl font-black uppercase tracking-[0.2em] text-[#f97316]">Contact Data</h3>
               <p className="text-sm font-bold text-blue-200/60 italic leading-relaxed">
-                Available for technical collaboration, engineering inquiries, and portal feedback[cite: 1, 2].
+                Available for technical collaboration, engineering inquiries, and portal feedback.
               </p>
             </div>
 
@@ -115,7 +115,7 @@ export default function ContactPage() {
                 <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-[0_0_10px_#4ade80]" />
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#1e3a8a]">System Status: Active</span>
               </div>
-              <p className="text-[#1e3a8a] font-black text-sm uppercase relative z-10">Batch 2028 Resource[cite: 1]</p>
+              <p className="text-[#1e3a8a] font-black text-sm uppercase relative z-10">Batch 2028</p>
             </div>
           </div>
 
@@ -133,13 +133,13 @@ export default function ContactPage() {
                   <input required type="text" className="w-full bg-[#1e3a8a] border-4 border-white/10 rounded-2xl p-4 font-bold focus:border-[#f97316] outline-none transition-all" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest ml-4 text-blue-200">Return Address</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest ml-4 text-blue-200">Email Address</label>
                   <input required type="email" className="w-full bg-[#1e3a8a] border-4 border-white/10 rounded-2xl p-4 font-bold focus:border-[#f97316] outline-none transition-all" />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest ml-4 text-blue-200">Message Payload</label>
+                <label className="text-[10px] font-black uppercase tracking-widest ml-4 text-blue-200">Message</label>
                 <textarea required rows={4} className="w-full bg-[#1e3a8a] border-4 border-white/10 rounded-2xl p-4 font-bold focus:border-[#f97316] outline-none transition-all resize-none"></textarea>
               </div>
 
@@ -153,7 +153,7 @@ export default function ContactPage() {
         {/* Footer */}
         <footer className="mt-auto p-10 bg-[#162e70]/40 flex justify-center border-t-[6px] border-white/5">
           <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20">
-            San Pablo City // Alaminos // Laguna[cite: 1]
+            San Pablo City // Alaminos // Laguna
           </p>
         </footer>
       </div>

@@ -1,163 +1,216 @@
 "use client";
 
-import React from 'react';
-import Link from 'next/link';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Briefcase, 
   Terminal, 
-  BookOpen, 
+  Award, 
   Info, 
   Mail, 
   HelpCircle, 
-  ArrowRight, 
-  LogOut,
-  ChevronRight
+  ChevronRight, 
+  LogOut, 
+  Calendar 
 } from 'lucide-react';
 
 export default function Dashboard() {
-  const modules = [
-    { 
-      title: "Career Paths", 
-      icon: Briefcase, 
-      href: "/career-paths", 
-      tag: "PATHWAYS", 
-      desc: "Explore specialized engineering tracks for CpE students." 
+  const router = useRouter();
+  
+  // Session parameters matching student database structures
+  const [studentId] = useState("23-15157");
+
+  // Core system navigation card arrays
+  const navigationCards = [
+    {
+      title: "Career Paths",
+      label: "PATHWAYS",
+      desc: "Explore specialized engineering tracks for CpE students.",
+      route: "/career-paths",
+      icon: <Briefcase className="text-white" size={22} />,
     },
-    { 
-      title: "Skills", 
-      icon: Terminal, 
-      href: "/skills", 
-      tag: "METRICS", 
-      desc: "Track proficiency in Arduino, SQL, and Next.js." 
+    {
+      title: "Skills",
+      label: "METRICS",
+      desc: "Track proficiency in Arduino, SQL, and Next.js.",
+      route: "/skills",
+      icon: <Terminal className="text-white" size={22} />,
     },
-    { 
-      title: "Job Prep", 
-      icon: BookOpen, 
-      href: "/job-prep", 
-      tag: "CAREER", 
-      desc: "Engineering resume builder and interview preparation." 
+    {
+      title: "Job Prep",
+      label: "CAREER",
+      desc: "Engineering resume builder and interview preparation.",
+      route: "/job-prep",
+      icon: <Award className="text-white" size={22} />,
     },
-    { 
-      title: "About", 
-      icon: Info, 
-      href: "/about", 
-      tag: "PORTAL", 
-      desc: "Mission, vision, and the tech behind this platform." 
+    {
+      title: "About",
+      label: "PORTAL",
+      desc: "Mission, vision, and the tech behind this platform.",
+      route: "/about",
+      icon: <Info className="text-white" size={22} />,
     },
-    { 
-      title: "Contact", 
-      icon: Mail, 
-      href: "/contact", 
-      tag: "SUPPORT", 
-      desc: "Get in touch with the development team for inquiries." 
+    {
+      title: "Contact",
+      label: "SUPPORT",
+      desc: "Get in touch with the development team for inquiries.",
+      route: "/contact",
+      icon: <Mail className="text-white" size={22} />,
     },
-    { 
-      title: "FAQs", 
-      icon: HelpCircle, 
-      href: "/faqs", 
-      tag: "HELP", 
-      desc: "Find answers to common questions about the portal." 
+    {
+      title: "FAQs",
+      label: "HELP",
+      desc: "Find answers to common questions about the portal.",
+      route: "/faqs",
+      icon: <HelpCircle className="text-white" size={22} />,
     }
   ];
 
   return (
-    <main className="min-h-screen bg-[#1e3a8a] text-white font-sans flex overflow-hidden">
+    <main className="min-h-screen bg-[#1e3a8a] text-white font-sans flex flex-col md:flex-row antialiased select-none overflow-x-hidden">
       
-      {/* NARROW LEFT BANNER */}
-      <aside className="w-[100px] md:w-[120px] bg-[#f97316] flex flex-col items-center py-12 border-r-[10px] border-[#162e70] shrink-0">
-        <div className="rotate-[-90deg] origin-center whitespace-nowrap mt-32">
-          <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#1e3a8a]">
-            CONTROL <span className="text-white">PANEL</span>
-          </h1>
+      {/* 1. STRUCTURAL CONTROLLER SIDEBAR (GEOMETRICALLY PERFECT CENTERED TEXT) */}
+      <aside className="w-full md:w-[90px] bg-[#f97316] flex md:flex-col justify-between items-center p-4 md:py-8 shrink-0 relative border-b-4 md:border-b-0 md:border-r-4 border-black/10 shadow-2xl z-20">
+        
+        {/* Profile/Identity Header Node for Mobile - Hidden on Desktop to maintain centering logic */}
+        <div className="md:hidden font-black text-xs bg-[#162e70] px-3 py-1.5 rounded-lg border border-white/10">
+          ID: {studentId}
         </div>
-        <Link 
-          href="/" 
-          className="mt-auto mb-10 p-4 bg-[#162e70] rounded-2xl text-[#f97316] hover:bg-white hover:text-[#1e3a8a] transition-all border-2 border-transparent hover:border-[#f97316]"
-        >
-          <LogOut size={24} />
-        </Link>
+
+        {/* Center alignment layout wrapper */}
+        <div className="hidden md:flex flex-1 items-center justify-center w-full h-full relative">
+          <h2 className="absolute text-3xl font-black uppercase tracking-[0.3em] text-[#1e3a8a] whitespace-nowrap select-none pointer-events-none transform -rotate-90 origin-center tracking-widest text-center">
+            Control Panel
+          </h2>
+        </div>
+
+        {/* Mobile alternative text banner */}
+        <h2 className="md:hidden text-lg font-black uppercase tracking-wider text-[#1e3a8a]">
+          Control Panel
+        </h2>
+
+        {/* Operational node parameters and system escape handles */}
+        <div className="flex md:flex-col items-center gap-3.5 mt-auto">
+          <div className="hidden md:flex w-11 h-11 bg-[#162e70] rounded-xl items-center justify-center font-black text-xs border border-white/10 shadow-md tracking-wider" title="Operator Signature ID">
+            {studentId.substring(0, 2)}
+          </div>
+          <button 
+            onClick={() => router.push('/')}
+            className="w-10 h-10 md:w-11 md:h-11 bg-[#162e70]/40 hover:bg-red-600 rounded-xl flex items-center justify-center border border-white/5 hover:border-red-500 text-white transition-all duration-200 group shadow-sm"
+            title="Terminate Active Link Session"
+          >
+            <LogOut size={16} className="group-hover:scale-110 group-hover:-translate-x-0.5 transition-transform" />
+          </button>
+        </div>
       </aside>
 
-      {/* MAIN CONTENT AREA */}
-      <div className="flex-grow flex flex-col h-screen overflow-y-auto">
+      {/* 2. CORE MONITOR SYSTEM MAIN WORKSPACE */}
+      <section className="flex-grow p-6 md:p-12 lg:p-16 flex flex-col justify-between relative z-10 space-y-12 max-w-[1600px] mx-auto w-full">
         
-        {/* Dashboard Header */}
-        <header className="p-10 border-b-[10px] border-[#f97316] bg-[#162e70] flex justify-between items-center sticky top-0 z-10 shadow-2xl">
-          <div>
-            <h2 className="text-4xl font-black uppercase tracking-tighter italic">Command Center</h2>
-            <p className="text-[#f97316] text-[10px] font-black uppercase tracking-[0.3em] mt-2">
+        {/* PORTAL SYSTEMS MONITOR IDENTIFIER HEADER */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+          <div className="space-y-1">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight italic text-white drop-shadow-sm">
+              Command Center
+            </h1>
+            <p className="text-xs font-bold tracking-[0.15em] text-orange-400 uppercase flex items-center gap-2">
+              <span className="inline-block w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
               Engineering Resource Gateway // PLSP-CPE
             </p>
           </div>
-          <div className="hidden sm:flex gap-4">
-             <div className="bg-[#1e3a8a] px-6 py-3 border-4 border-[#f97316] rounded-2xl flex flex-col items-center shadow-lg">
-                <span className="text-[9px] font-black uppercase tracking-widest text-[#f97316]">Active Year</span>
-                <span className="text-xl font-black">2026</span>
-             </div>
+
+          {/* Runtime configuration status metadata block badge */}
+          <div className="bg-[#162e70] border border-white/10 rounded-2xl px-5 py-3.5 flex items-center gap-4 shadow-xl self-stretch sm:self-auto justify-center backdrop-blur-md">
+            <div className="p-2.5 bg-[#f97316] rounded-xl text-[#1e3a8a] shadow-inner">
+              <Calendar size={18} />
+            </div>
+            <div className="text-right">
+              <span className="text-[9px] font-black tracking-widest text-blue-300/60 block uppercase">System Context Time</span>
+              <span className="text-lg font-black text-white leading-none tracking-wider">2026</span>
+            </div>
           </div>
-        </header>
+        </div>
 
-        {/* 6-Option Grid */}
-        <section className="p-8 md:p-12 lg:p-16 max-w-[1600px] w-full mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12">
-            {modules.map((m, i) => (
-              <Link 
-                key={i} 
-                href={m.href} 
-                className="bg-[#162e70] p-10 rounded-[3rem] border-[6px] border-white/5 hover:border-[#f97316] transition-all group shadow-2xl hover:-translate-y-2 flex flex-col justify-between min-h-[320px] relative overflow-hidden"
-              >
-                {/* Decorative Icon Background */}
-                <m.icon className="absolute -bottom-6 -right-6 text-white/5 group-hover:text-[#f97316]/10 transition-colors" size={180} />
+        {/* 3. FLUID CATEGORY BREAKPOINT PIPELINE BLOCK */}
+        <div className="w-full space-y-3.5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left font-black text-[10px] tracking-[0.25em] text-orange-400">
+            <div className="md:pl-4">
+              <span className="bg-[#162e70] px-3.5 py-1.5 rounded-lg border border-white/5 shadow-sm">
+                // PATHWAYS NODE
+              </span>
+            </div>
+            <div className="hidden md:block md:pl-4">
+              <span className="bg-[#162e70] px-3.5 py-1.5 rounded-lg border border-white/5 shadow-sm">
+                // METRICS CLUSTER
+              </span>
+            </div>
+            <div className="hidden md:block md:pl-4">
+              <span className="bg-[#162e70] px-3.5 py-1.5 rounded-lg border border-white/5 shadow-sm">
+                // CAREER VECTORS
+              </span>
+            </div>
+          </div>
 
-                <div className="relative z-10">
-                  <div className="flex justify-between items-start mb-8">
-                    <div className="bg-[#f97316] p-4 rounded-2xl shadow-lg border-4 border-[#1e3a8a] group-hover:scale-110 transition-transform">
-                      <m.icon size={28} className="text-[#1e3a8a]" />
-                    </div>
-                    <span className="text-[9px] font-black uppercase tracking-widest border-2 border-white/10 px-3 py-1 rounded-lg text-blue-300">
-                      {m.tag}
-                    </span>
-                  </div>
-                  <h3 className="text-3xl font-black uppercase mb-4 tracking-tight group-hover:text-[#f97316] transition-colors leading-none">
-                    {m.title}
-                  </h3>
-                  <p className="text-xs font-bold text-blue-100/60 leading-relaxed italic pr-4">
-                    {m.desc}
-                  </p>
+          {/* Seamless horizontal alignment linear divider wire */}
+          <div className="h-[4px] bg-[#f97316] w-full rounded-full opacity-95 shadow-inner" />
+        </div>
+
+        {/* 4. PREMIUM GLASSMORPHIC NAVIGATION ARCHITECTURE MATRIX GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-10 flex-grow">
+          {navigationCards.map((card, index) => (
+            <div 
+              key={index}
+              onClick={() => router.push(card.route)}
+              className="bg-gradient-to-br from-[#162e70]/95 to-[#162e70]/60 p-6 md:p-8 rounded-[2rem] border border-white/10 hover:border-[#f97316]/60 shadow-xl flex flex-col justify-between group cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl relative overflow-hidden"
+            >
+              {/* Technical schema geometric background overlay print detail */}
+              <div className="absolute -right-4 -bottom-6 text-white/[0.02] font-black text-9xl tracking-tighter scale-100 group-hover:scale-105 group-hover:-translate-x-2 transition-transform duration-500 pointer-events-none uppercase select-none">
+                {card.label.substring(0, 3)}
+              </div>
+
+              {/* Central Information Cluster */}
+              <div className="space-y-5 relative z-10">
+                {/* Structural bounding icon matrix frame */}
+                <div className="w-11 h-11 bg-[#f97316] rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/10 transform group-hover:scale-105 transition-transform duration-300">
+                  {card.icon}
                 </div>
                 
-                <div className="mt-8 flex items-center justify-between relative z-10">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#f97316] opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">
-                    Enter Module
+                <div className="space-y-1.5">
+                  <span className="text-[9px] font-black tracking-widest text-orange-400 block opacity-80">
+                    SYSTEM_NODE // {card.label}
                   </span>
-                  <div className="bg-[#1e3a8a] p-3 rounded-xl border-2 border-[#f97316] group-hover:bg-[#f97316] group-hover:text-white transition-colors">
-                    <ChevronRight size={20} />
-                  </div>
+                  <h3 className="text-2xl font-black uppercase tracking-tight text-white group-hover:text-orange-400 transition-colors duration-200">
+                    {card.title}
+                  </h3>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </section>
+                
+                <p className="text-xs font-medium text-blue-200/70 leading-relaxed max-w-[260px]">
+                  {card.desc}
+                </p>
+              </div>
 
-        {/* Footer Statistics Bar */}
-        <footer className="mt-auto p-10 border-t-[6px] border-white/5 bg-[#162e70]/40 flex flex-wrap justify-between items-center gap-6">
-          <div className="flex gap-8">
-            <div className="border-l-4 border-[#f97316] pl-4">
-              <p className="text-xl font-black leading-none">2028</p>
-              <p className="text-[9px] font-black uppercase tracking-widest text-blue-300 mt-1">Graduation Target</p>
+              {/* Access pathway router anchor handle node */}
+              <div className="mt-8 pt-4 border-t border-white/5 flex justify-end relative z-10">
+                <div className="w-10 h-10 rounded-xl bg-[#1e3a8a]/40 border border-white/5 group-hover:border-[#f97316] flex items-center justify-center text-blue-300 group-hover:text-white transition-all duration-300 group-hover:bg-[#f97316] shadow-sm">
+                  <ChevronRight size={16} className="transform group-hover:translate-x-0.5 transition-transform duration-300" />
+                </div>
+              </div>
             </div>
-            <div className="border-l-4 border-white/20 pl-4">
-              <p className="text-xl font-black leading-none text-white/40">v4.0.2</p>
-              <p className="text-[9px] font-black uppercase tracking-widest text-white/20 mt-1">System Build</p>
-            </div>
+          ))}
+        </div>
+
+        {/* 5. METRIC INFRASTRUCTURE COMPILING FOOTER BAR */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-white/10 text-[10px] font-black tracking-[0.2em] text-blue-200/40 uppercase">
+          <div className="flex flex-wrap justify-center sm:justify-start items-center gap-x-6 gap-y-2">
+            <span className="border-l-4 border-[#f97316] pl-2.5 text-white/90">2028 Graduation Target</span>
+            <span className="text-blue-300/30">v4.0.2 System Build</span>
           </div>
-          <div className="flex gap-4">
-            <div className="bg-[#f97316] px-4 py-2 rounded-lg text-[#1e3a8a] font-black text-[10px] uppercase tracking-widest shadow-lg">
-              Authorized Personnel Only
-            </div>
+          <div className="bg-orange-500/10 text-[#f97316] border border-[#f97316]/20 px-4 py-1.5 rounded-md text-[9px] font-black tracking-[0.2em] shadow-inner">
+            Authorized Personnel Only
           </div>
-        </footer>
-      </div>
+        </div>
+
+      </section>
     </main>
   );
 }

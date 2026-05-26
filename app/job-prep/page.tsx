@@ -71,35 +71,52 @@ export default function JobPrep() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0f172a] text-slate-200 font-sans selection:bg-[#3b82f6]/30">
-      {/* Standard Header */}
-      <header className="py-12 px-6 text-center bg-[#1e293b] border-b border-slate-700 shadow-sm">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-blue-500 uppercase tracking-wider mb-2">
+    <main className="min-h-screen bg-[#1e3a8a] text-white font-sans flex flex-col antialiased select-none overflow-x-hidden selection:bg-[#f97316]/30">
+      
+      {/* HEADER SECTION - Styled to match Command Center paneling */}
+      <header className="py-12 px-6 text-center bg-[#162e70] border-b-4 border-black/10 shadow-2xl relative z-10">
+        <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tight italic text-white drop-shadow-sm mb-2">
           CAREER READINESS PORTAL
         </h1>
-        <p className="text-slate-400 text-sm md:text-base font-medium">
-          Essential steps to land your first Engineering role.
+        <p className="text-xs font-bold tracking-[0.15em] text-orange-400 uppercase flex items-center justify-center gap-2">
+          <span className="inline-block w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+          SYSTEM_VECTORS // LANDING YOUR FIRST ENGINEERING ROLE
         </p>
       </header>
 
-      {/* Standard Content Grid */}
-      <section className="max-w-5xl mx-auto py-12 px-6 space-y-8">
+      {/* CORE WORKSPACE SECTION */}
+      <section className="max-w-5xl mx-auto py-12 px-5 sm:px-6 space-y-8 md:space-y-12 w-full relative z-10">
+        
+        {/* PIPELINE BREAKPOINT SEPARATOR WIRE */}
+        <div className="w-full space-y-3.5">
+          <div className="text-left font-black text-[10px] tracking-[0.25em] text-orange-400">
+            <span className="bg-[#162e70] px-3.5 py-1.5 rounded-lg border border-white/5 shadow-sm">
+              // OPERATIONS PIPELINE
+            </span>
+          </div>
+          <div className="h-[4px] bg-[#f97316] w-full rounded-full opacity-95 shadow-inner" />
+        </div>
+
+        {/* STEP METRIC PIPELINE CARDS */}
         {jobSteps.map((step, i) => (
-          <div key={i} className="bg-[#1e293b] rounded-2xl border border-slate-700 p-8 shadow-md transition-all hover:border-blue-500/50">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="p-3 bg-blue-500/10 rounded-xl">
-                <step.icon size={28} className="text-blue-400" />
+          <div key={i} className="bg-gradient-to-br from-[#162e70]/95 to-[#162e70]/60 rounded-[2rem] border border-white/10 hover:border-[#f97316]/60 p-6 md:p-8 shadow-xl transition-all duration-300 hover:-translate-y-1.5">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-11 h-11 bg-[#f97316] rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/10 text-[#1e3a8a]">
+                <step.icon size={22} />
               </div>
-              <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-                {step.title}
-              </h2>
+              <div>
+                <span className="text-[9px] font-black tracking-widest text-orange-400 block opacity-80">PIPELINE_NODE // 0{i + 1}</span>
+                <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white">
+                  {step.title}
+                </h2>
+              </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
               {step.points.map((point, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="text-blue-500 mt-1 shrink-0" size={18} />
-                  <p className="text-slate-300 text-sm md:text-base leading-relaxed font-medium">
+                <div key={index} className="flex items-start gap-3 bg-[#112255]/40 p-3 rounded-xl border border-white/5">
+                  <CheckCircle2 className="text-[#f97316] mt-0.5 shrink-0" size={16} />
+                  <p className="text-blue-200/90 text-xs md:text-sm leading-relaxed font-medium">
                     {point}
                   </p>
                 </div>
@@ -108,16 +125,13 @@ export default function JobPrep() {
           </div>
         ))}
 
-        {/* NEW REPLACEMENT: INTERACTIVE TECHNICAL INTERVIEW SIMULATOR */}
-        <div className="bg-[#1e293b] rounded-2xl border border-slate-700 p-6 md:p-8 shadow-lg space-y-6">
-          <div className="border-b border-slate-700 pb-4">
-            <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
-              <Terminal className="text-blue-400" size={20} />
+        {/* REPLACEMENT: GLASSMORPHIC INTERACTIVE TECHNICAL INTERVIEW SIMULATOR */}
+        <div className="bg-gradient-to-br from-[#162e70]/95 to-[#162e70]/60 rounded-[2rem] border border-white/10 p-6 md:p-8 shadow-xl space-y-6">
+          <div className="border-b border-white/10 pb-4">
+            <span className="text-[9px] font-black tracking-widest text-orange-400 block opacity-80">SYSTEM_CRITERIA // TRACKS</span>
+            <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white flex items-center gap-2">
               Technical Interview Simulator
             </h3>
-            <p className="text-slate-400 text-xs mt-1">
-              Select an engineering vector node to preview targeted, system-specific defense questions.
-            </p>
           </div>
 
           {/* Interactive Navigation Hub */}
@@ -126,10 +140,10 @@ export default function JobPrep() {
               <button
                 key={key}
                 onClick={() => setActiveTab(key)}
-                className={`px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all ${
+                className={`px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all duration-200 border ${
                   activeTab === key 
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-900/40' 
-                    : 'bg-[#0f172a] text-slate-400 hover:text-slate-200 border border-slate-800'
+                    ? 'bg-[#f97316] text-[#1e3a8a] border-[#f97316] shadow-md shadow-orange-500/20' 
+                    : 'bg-[#1e3a8a]/40 text-blue-300 border-white/5 hover:border-orange-500/40 hover:text-white'
                 }`}
               >
                 {mockQuestions[key].icon}
@@ -139,23 +153,23 @@ export default function JobPrep() {
           </div>
 
           {/* Core Simulator Console Panel */}
-          <div className="bg-[#0f172a] rounded-xl border border-slate-800 p-5 space-y-4">
+          <div className="bg-[#1e3a8a]/40 rounded-2xl border border-white/5 p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black tracking-widest text-blue-400 uppercase bg-blue-500/10 px-2.5 py-1 rounded-md">
+              <span className="text-[9px] font-black tracking-widest text-orange-400 uppercase bg-orange-500/10 border border-orange-500/20 px-2.5 py-1 rounded-md">
                 Active Node // {mockQuestions[activeTab].category}
               </span>
-              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1">
-                Live Preview <ExternalLink size={10} />
+              <span className="text-[9px] text-blue-300/40 font-black uppercase tracking-wider flex items-center gap-1">
+                Live Console <ExternalLink size={10} />
               </span>
             </div>
 
-            <div className="space-y-2">
-              <h4 className="text-sm md:text-base font-bold text-white leading-snug">
+            <div className="space-y-3">
+              <h4 className="text-base md:text-lg font-black text-white leading-snug uppercase tracking-tight italic">
                 "{mockQuestions[activeTab].question}"
               </h4>
-              <div className="h-px bg-slate-800/60 my-2" />
-              <p className="text-xs md:text-sm text-slate-400 leading-relaxed pl-3 border-l-2 border-blue-500/40">
-                <strong className="text-slate-300 font-semibold block mb-1">Response Architecture Strategy:</strong>
+              <div className="h-[2px] bg-[#f97316] w-12 rounded-full opacity-60" />
+              <p className="text-xs md:text-sm text-blue-200/80 leading-relaxed pt-2">
+                <strong className="text-orange-400 font-black uppercase tracking-widest block text-[10px] mb-1">Response Architecture Strategy:</strong>
                 {mockQuestions[activeTab].guide}
               </p>
             </div>
@@ -163,16 +177,16 @@ export default function JobPrep() {
         </div>
       </section>
 
-      {/* Standard Footer */}
-      <footer className="max-w-5xl mx-auto py-12 px-6 border-t border-slate-800 flex justify-between items-center">
+      {/* FOOTER BAR SECTION - Configured to frame the layout perfectly */}
+      <footer className="max-w-5xl mx-auto py-8 px-6 mt-auto border-t border-white/10 flex justify-between items-center w-full text-[10px] font-black tracking-[0.2em] text-blue-200/40 uppercase">
         <button 
           onClick={() => window.history.back()}
-          className="flex items-center gap-2 text-slate-400 hover:text-blue-400 font-bold text-sm transition-colors group"
+          className="flex items-center gap-2 text-white/60 hover:text-[#f97316] font-black transition-colors group"
         >
-          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
           Return to Portal
         </button>
-        <span className="text-slate-600 font-bold text-xs uppercase tracking-widest">
+        <span className="border-l-4 border-[#f97316] pl-2.5 text-blue-300/30">
           PLSP-CPE 2026
         </span>
       </footer>

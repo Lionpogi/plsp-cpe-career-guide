@@ -54,55 +54,57 @@ export default function HeroAuthPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#1e3a8a] text-white font-sans flex overflow-hidden">
+    // Changed flex-col on mobile to flex-row on desktop. Changed overflow-hidden to allow scrolling when needed.
+    <main className="min-h-screen bg-[#1e3a8a] text-white font-sans flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
       
-      {/* NARROW LEFT SIDEBAR */}
-      <aside className="w-[80px] md:w-[120px] bg-[#f97316] flex flex-col items-center py-12 border-r-[10px] border-[#162e70] shrink-0 z-20">
-        <div className="rotate-[-90deg] origin-center whitespace-nowrap mt-32">
-          <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#1e3a8a]">
+      {/* RESPONSIVE BRANDING BAR */}
+      {/* Mobile: Full-width top header row | Desktop: Striking narrow left column block */}
+      <aside className="w-full md:w-[120px] bg-[#f97316] flex flex-row md:flex-col items-center justify-between md:justify-start py-4 md:py-12 px-6 md:px-0 border-b-4 md:border-b-0 md:border-r-[10px] border-[#162e70] shrink-0 z-20">
+        <div className="md:rotate-[-90deg] md:origin-center md:whitespace-nowrap md:mt-32">
+          <h1 className="text-xl sm:text-2xl md:text-5xl font-black uppercase tracking-tighter text-[#1e3a8a]">
             PLSP <span className="text-white">CPE</span>
           </h1>
         </div>
-        <div className="mt-auto mb-10 text-[#1e3a8a]">
-          <ShieldCheck size={32} />
+        <div className="md:mt-auto text-[#1e3a8a]">
+          <ShieldCheck size={28} className="md:w-8 md:h-8" />
         </div>
       </aside>
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex-grow flex flex-col items-center justify-center relative p-6 md:p-12 overflow-y-auto">
+      <div className="flex-grow flex flex-col items-center justify-center relative p-4 sm:p-6 md:p-12 pt-16 md:pt-12 overflow-y-auto">
         
         {/* Top Accent Bar */}
         <div className="absolute top-0 left-0 w-full h-[40px] bg-[#f97316] flex items-center justify-center z-10">
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#1e3a8a]">
+          <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#1e3a8a] px-4 text-center truncate">
             #1 PLSP Engineering Career Resource
           </span>
         </div>
 
         {/* Hero Section Content */}
-        <div className="max-w-4xl w-full text-center space-y-8 mt-16 mb-12">
-          <div className="space-y-2">
-            <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none italic">
+        <div className="max-w-4xl w-full text-center space-y-6 md:space-y-8 mt-8 md:mt-16 mb-8 md:mb-12">
+          <div className="space-y-1 md:space-y-2">
+            <h2 className="text-4xl sm:text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none italic">
               WORK SMART.
             </h2>
-            <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none italic text-[#f97316]">
+            <h2 className="text-4xl sm:text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none italic text-[#f97316]">
               ENGINEER BETTER.
             </h2>
           </div>
 
-          <p className="max-w-2xl mx-auto text-blue-100/80 font-bold text-sm md:text-base leading-relaxed">
+          <p className="max-w-xl md:max-w-2xl mx-auto text-blue-100/80 font-bold text-xs sm:text-sm md:text-base leading-relaxed px-2">
             The comprehensive career portal designed for <span className="text-white">PLSP Computer Engineering</span> students. Master your tech stack, track your academic progress, and conquer your career goals.
           </p>
 
           {/* AUTH CARD INTEGRATION */}
-          <div className="max-w-md mx-auto bg-[#162e70] p-8 md:p-10 rounded-[3rem] border-[6px] border-[#f97316] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-            <h3 className="text-2xl font-black uppercase italic tracking-tight mb-6">
+          <div className="max-w-sm sm:max-w-md mx-auto bg-[#162e70] p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[3rem] border-4 sm:border-[6px] border-[#f97316] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <h3 className="text-xl sm:text-2xl font-black uppercase italic tracking-tight mb-4 sm:mb-6">
               {isLogin ? 'Initialize Session' : 'Register Profile'}
             </h3>
             
             <form onSubmit={handleAuth} className="space-y-4 text-left">
               {/* Dynamic Error Feedback UI Node */}
               {error && (
-                <div className="bg-red-500/20 border-2 border-red-500 rounded-xl p-4 flex items-start gap-3 text-red-200 text-xs font-bold leading-normal animate-in fade-in zoom-in-95 duration-200">
+                <div className="bg-red-500/20 border-2 border-red-500 rounded-xl p-4 flex items-start gap-3 text-red-200 text-xs font-bold leading-normal">
                   <AlertCircle size={16} className="shrink-0 mt-0.5 text-red-400" />
                   <span>{error}</span>
                 </div>
@@ -114,9 +116,9 @@ export default function HeroAuthPage() {
                   type="text" 
                   value={studentId}
                   onChange={handleIdInput}
-                  maxLength={8} // 7 digits + 1 dash
+                  maxLength={8}
                   placeholder="23-15157"
-                  className="w-full bg-[#1e3a8a] border-4 border-white/10 rounded-2xl p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-sm tracking-widest"
+                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-widest"
                 />
               </div>
 
@@ -127,15 +129,15 @@ export default function HeroAuthPage() {
                   value={securityKey}
                   onChange={(e) => setSecurityKey(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#1e3a8a] border-4 border-white/10 rounded-2xl p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-sm"
+                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm"
                 />
               </div>
 
               <button 
                 type="submit"
-                className="w-full bg-[#f97316] text-[#1e3a8a] py-4 rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2"
+                className="w-full bg-[#f97316] text-[#1e3a8a] py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2 text-xs sm:text-sm"
               >
-                BEGIN EXPLORING <ArrowRight size={20} />
+                BEGIN EXPLORING <ArrowRight size={18} />
               </button>
             </form>
 
@@ -144,7 +146,7 @@ export default function HeroAuthPage() {
                 setIsLogin(!isLogin);
                 setError(null);
               }}
-              className="mt-6 text-[10px] font-black uppercase tracking-widest text-blue-300 hover:text-[#f97316] transition-colors"
+              className="mt-4 sm:mt-6 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-blue-300 hover:text-[#f97316] transition-colors"
             >
               {isLogin ? "✓ EXCLUSIVE FOR PLSP CPE STUDENTS" : "ALREADY HAVE AN ACCOUNT? LOGIN"}
             </button>
@@ -152,26 +154,27 @@ export default function HeroAuthPage() {
         </div>
 
         {/* BOTTOM STATS BOX */}
-        <div className="w-full max-w-3xl bg-[#f97316] rounded-[2.5rem] p-8 flex flex-wrap justify-around items-center gap-6 shadow-2xl border-b-[8px] border-[#162e70]">
-          <div className="text-center">
-            <p className="text-4xl font-black text-[#1e3a8a]">2028</p>
-            <p className="text-[10px] font-black uppercase tracking-widest text-white mt-1">Target Graduation</p>
+        {/* flex-wrap ensures components drop down gracefully on micro screens */}
+        <div className="w-full max-w-3xl bg-[#f97316] rounded-[1.5rem] sm:rounded-[2.5rem] p-4 sm:p-8 flex flex-row flex-wrap justify-around items-center gap-4 sm:gap-6 shadow-2xl border-b-[6px] sm:border-b-[8px] border-[#162e70]">
+          <div className="text-center min-w-[80px]">
+            <p className="text-2xl sm:text-4xl font-black text-[#1e3a8a]">2028</p>
+            <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-white mt-0.5">Target Graduation</p>
           </div>
-          <div className="h-12 w-[4px] bg-[#1e3a8a]/20 hidden md:block" />
-          <div className="text-center">
-            <p className="text-4xl font-black text-[#1e3a8a]">100%</p>
-            <p className="text-[10px] font-black uppercase tracking-widest text-white mt-1">CpE Focused</p>
+          <div className="h-12 w-[2px] bg-[#1e3a8a]/20 hidden sm:block" />
+          <div className="text-center min-w-[80px]">
+            <p className="text-2xl sm:text-4xl font-black text-[#1e3a8a]">100%</p>
+            <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-white mt-0.5">CpE Focused</p>
           </div>
-          <div className="h-12 w-[4px] bg-[#1e3a8a]/20 hidden md:block" />
-          <div className="text-center">
-            <p className="text-4xl font-black text-[#1e3a8a]">SQL+</p>
-            <p className="text-[10px] font-black uppercase tracking-widest text-white mt-1">Database Ready</p>
+          <div className="h-12 w-[2px] bg-[#1e3a8a]/20 hidden sm:block" />
+          <div className="text-center min-w-[80px]">
+            <p className="text-2xl sm:text-4xl font-black text-[#1e3a8a]">SQL+</p>
+            <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-white mt-0.5">Database Ready</p>
           </div>
         </div>
 
         {/* Quote Footer */}
-        <div className="w-full mt-12 py-6 border-t-[4px] border-white/10 text-center">
-          <p className="italic font-bold text-blue-200/60 text-sm">
+        <div className="w-full mt-8 md:mt-12 py-4 sm:py-6 border-t-2 sm:border-t-[4px] border-white/10 text-center">
+          <p className="italic font-bold text-blue-200/60 text-xs sm:text-sm px-4">
             "Ang Pag-asa ng Bayan ay nasa Galing ng Inhinyero."
           </p>
         </div>

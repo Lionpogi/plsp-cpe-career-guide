@@ -1,17 +1,21 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   FileText, 
   Briefcase, 
   Search, 
   CheckCircle2, 
   ArrowLeft,
-  Download,
-  GraduationCap
+  Terminal,
+  Cpu,
+  Database,
+  ExternalLink
 } from 'lucide-react';
 
 export default function JobPrep() {
+  const [activeTab, setActiveTab] = useState<'hardware' | 'software' | 'behavioral'>('hardware');
+
   const jobSteps = [
     {
       title: "1. The Engineering Resume",
@@ -44,6 +48,27 @@ export default function JobPrep() {
       ]
     }
   ];
+
+  const mockQuestions = {
+    hardware: {
+      category: "Embedded Hardware & Systems",
+      icon: <Cpu size={18} />,
+      question: "How do you handle precise peripheral signal timing or hardware output delivery using standard microcontrollers?",
+      guide: "Explain logic structures using projects like the Skinner Box or RFID systems. Discuss configuring hardware triggers, dealing with bouncing mechanical switches, and decoupling electrical outputs from noise."
+    },
+    software: {
+      category: "Databases & Web Integration",
+      icon: <Database size={18} />,
+      question: "Can you describe a scenario where you had to structure complex relationships or parse multi-table relational datasets?",
+      guide: "Use your SQL and Next.js project background. Discuss sketching clean Entity-Relationship Diagrams (ERDs), drafting normalization pathways, and handling structured joins to optimize raw search query returns safely."
+    },
+    behavioral: {
+      category: "Leadership & Collaboration",
+      icon: <Terminal size={18} />,
+      question: "Tell me about a time you had to present technical engineering logic to groupmates or peers who lacked deep domain experience.",
+      guide: "Draw on your academic collaboration or leadership backgrounds. Explain how you break down complex code repositories or schematics into digestible visual diagrams to build team consensus."
+    }
+  };
 
   return (
     <main className="min-h-screen bg-[#0f172a] text-slate-200 font-sans selection:bg-[#3b82f6]/30">
@@ -83,16 +108,58 @@ export default function JobPrep() {
           </div>
         ))}
 
-        {/* Action Card */}
-        <div className="bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-2xl border border-blue-500/20 p-10 text-center shadow-lg">
-          <GraduationCap size={48} className="text-blue-400 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-white mb-2">Ready to start?</h3>
-          <p className="text-slate-400 text-sm mb-8 max-w-md mx-auto">
-            Download our PLSP-specific resume template designed for Computer Engineering students.
-          </p>
-          <button className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-lg font-bold text-sm transition-all flex items-center gap-2 mx-auto shadow-lg shadow-blue-900/20 active:scale-95">
-            <Download size={18} /> Download Template (PDF)
-          </button>
+        {/* NEW REPLACEMENT: INTERACTIVE TECHNICAL INTERVIEW SIMULATOR */}
+        <div className="bg-[#1e293b] rounded-2xl border border-slate-700 p-6 md:p-8 shadow-lg space-y-6">
+          <div className="border-b border-slate-700 pb-4">
+            <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+              <Terminal className="text-blue-400" size={20} />
+              Technical Interview Simulator
+            </h3>
+            <p className="text-slate-400 text-xs mt-1">
+              Select an engineering vector node to preview targeted, system-specific defense questions.
+            </p>
+          </div>
+
+          {/* Interactive Navigation Hub */}
+          <div className="flex flex-wrap gap-2">
+            {(Object.keys(mockQuestions) as Array<keyof typeof mockQuestions>).map((key) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key)}
+                className={`px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all ${
+                  activeTab === key 
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-900/40' 
+                    : 'bg-[#0f172a] text-slate-400 hover:text-slate-200 border border-slate-800'
+                }`}
+              >
+                {mockQuestions[key].icon}
+                {key}
+              </button>
+            ))}
+          </div>
+
+          {/* Core Simulator Console Panel */}
+          <div className="bg-[#0f172a] rounded-xl border border-slate-800 p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black tracking-widest text-blue-400 uppercase bg-blue-500/10 px-2.5 py-1 rounded-md">
+                Active Node // {mockQuestions[activeTab].category}
+              </span>
+              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1">
+                Live Preview <ExternalLink size={10} />
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="text-sm md:text-base font-bold text-white leading-snug">
+                "{mockQuestions[activeTab].question}"
+              </h4>
+              <div className="h-px bg-slate-800/60 my-2" />
+              <p className="text-xs md:text-sm text-slate-400 leading-relaxed pl-3 border-l-2 border-blue-500/40">
+                <strong className="text-slate-300 font-semibold block mb-1">Response Architecture Strategy:</strong>
+                {mockQuestions[activeTab].guide}
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

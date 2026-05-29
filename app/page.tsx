@@ -7,7 +7,6 @@ export default function HeroAuthPage() {
   const [studentId, setStudentId] = useState('');
   const [securityKey, setSecurityKey] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   // Validates the precise XX-XXXXX layout constraint
   const validateStudentId = (id: string) => {
@@ -27,14 +26,14 @@ export default function HeroAuthPage() {
     setStudentId(formattedValue);
   };
 
-  const handleAuth = async (e: React.FormEvent) => {
+  const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     const cleanId = studentId.trim();
     const cleanKey = securityKey.trim();
 
-    // 1. Structural Layout Form Input Validations
+    // 1. Structural Form Input Validations
     if (!cleanId || !cleanKey) {
       setError("Transmission failed: All authorization vectors required.");
       return;
@@ -50,34 +49,14 @@ export default function HeroAuthPage() {
       return;
     }
 
-    // 2. LIVE FETCH PAYLOAD: Send login parameters straight to PostgreSQL API Node
-    setLoading(true);
-    try {
-      const response = await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'login',
-          studentId: cleanId,
-          securityKey: cleanKey
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Render target database error messages directly onto the warning panel UI
-        setError(data.error || "An unknown network vector error occurred.");
-        setLoading(false);
-        return;
-      }
-
-      // Transmission node established successfully. Routing directly to the application framework
+    // 2. SIMPLIFIED CLIENT-SIDE VALIDATION GATE (No Database Connection)
+    // Matches credentials locally on the client side instantly
+    if (cleanId === "24-14527" && cleanKey === "adminpassword") {
       window.location.href = '/dashboard';
-
-    } catch (err) {
-      setError("Transmission Failure: Could not establish connection node with the database API.");
-      setLoading(false);
+    } else if (cleanId !== "24-14527") {
+      setError("Access Denied: Student ID is not recognized inside the network system.");
+    } else {
+      setError("Access Denied: Invalid Security Credential Token.");
     }
   };
 
@@ -143,9 +122,8 @@ export default function HeroAuthPage() {
                   value={studentId}
                   onChange={handleIdInput}
                   maxLength={8}
-                  disabled={loading}
                   placeholder="24-14527"
-                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-widest disabled:opacity-50"
+                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-widest"
                 />
               </div>
 
@@ -155,18 +133,16 @@ export default function HeroAuthPage() {
                   type="password" 
                   value={securityKey}
                   onChange={(e) => setSecurityKey(e.target.value)}
-                  disabled={loading}
                   placeholder="••••••••"
-                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm disabled:opacity-50"
+                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm"
                 />
               </div>
 
               <button 
                 type="submit"
-                disabled={loading}
-                className="w-full bg-[#f97316] text-[#1e3a8a] py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2 text-xs sm:text-sm disabled:opacity-50"
+                className="w-full bg-[#f97316] text-[#1e3a8a] py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2 text-xs sm:text-sm"
               >
-                {loading ? 'PROCESSING VECTOR...' : 'BEGIN EXPLORING'} <ArrowRight size={18} />
+                BEGIN EXPLORING <ArrowRight size={18} />
               </button>
             </form>
           </div>
@@ -185,8 +161,8 @@ export default function HeroAuthPage() {
           </div>
           <div className="h-12 w-[2px] bg-[#1e3a8a]/20 hidden sm:block" />
           <div className="text-center min-w-[80px]">
-            <p className="text-2xl sm:text-4xl font-black text-[#1e3a8a]">SQL+</p>
-            <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-white mt-0.5">Database Ready</p>
+            <p className="text-2xl sm:text-4xl font-black text-[#1e3a8a]">LOCAL</p>
+            <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-white mt-0.5">Validation Mode</p>
           </div>
         </div>
 

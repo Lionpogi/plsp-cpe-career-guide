@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { ArrowRight, ShieldCheck, AlertCircle, User } from 'lucide-react';
 
 export default function HeroAuthPage() {
@@ -11,7 +10,7 @@ export default function HeroAuthPage() {
   const [securityKey, setSecurityKey] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+
 
   // Validates the precise XX-XXXXX layout constraint
   const validateStudentId = (id: string) => {
@@ -91,7 +90,6 @@ export default function HeroAuthPage() {
         alert("Registration Successful! Profile loaded directly into your PostgreSQL table. You can now log in.");
       } else {
         // Validation successfully cleared. Redirecting directly to the application framework
-        router.push('/dashboard');
       }
 
     } catch (err) {

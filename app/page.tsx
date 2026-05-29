@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
+import { ArrowRight, ShieldCheck, AlertCircle, User } from 'lucide-react';
 
 export default function HeroAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [fullName, setFullName] = useState('');
   const [studentId, setStudentId] = useState('');
   const [securityKey, setSecurityKey] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +35,11 @@ export default function HeroAuthPage() {
     setError(null);
 
     // 1. Structural Sanity Validations
+    if (!isLogin && !fullName.trim()) {
+      setError("Transmission failed: Account generation vectors require your Identification Name.");
+      return;
+    }
+
     if (!studentId.trim() || !securityKey.trim()) {
       setError("Transmission failed: All authorization vectors required.");
       return;
@@ -50,6 +56,7 @@ export default function HeroAuthPage() {
     }
 
     // 2. Route payload processing on successfully cleared checks
+    // In a live system, registration payload would be sent to database here
     router.push('/dashboard');
   };
 
@@ -110,6 +117,20 @@ export default function HeroAuthPage() {
                 </div>
               )}
 
+              {/* Conditional Registration Field */}
+              {!isLogin && (
+                <div className="animate-in fade-in slide-in-from-top-2 duration-200">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-blue-300 block mb-1.5 ml-2">Full Legal Name</label>
+                  <input 
+                    type="text" 
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="April C. Mission"
+                    className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-wide"
+                  />
+                </div>
+              )}
+
               <div>
                 <label className="text-[9px] font-black uppercase tracking-widest text-blue-300 block mb-1.5 ml-2">University Matrix ID</label>
                 <input 
@@ -137,7 +158,7 @@ export default function HeroAuthPage() {
                 type="submit"
                 className="w-full bg-[#f97316] text-[#1e3a8a] py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2 text-xs sm:text-sm"
               >
-                BEGIN EXPLORING <ArrowRight size={18} />
+                {isLogin ? 'BEGIN EXPLORING' : 'CREATE MATRIX PROFILE'} <ArrowRight size={18} />
               </button>
             </form>
 
@@ -146,9 +167,9 @@ export default function HeroAuthPage() {
                 setIsLogin(!isLogin);
                 setError(null);
               }}
-              className="mt-4 sm:mt-6 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-blue-300 hover:text-[#f97316] transition-colors"
+              className="mt-4 sm:mt-6 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-blue-300 hover:text-[#f97316] transition-colors block mx-auto bg-transparent border-none outline-none cursor-pointer"
             >
-              {isLogin ? "✓ EXCLUSIVE FOR PLSP CPE STUDENTS" : "ALREADY HAVE AN ACCOUNT? LOGIN"}
+              {isLogin ? "No account yet? Register here" : "Already have an account? Login"}
             </button>
           </div>
         </div>

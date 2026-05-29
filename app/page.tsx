@@ -56,16 +56,13 @@ export default function HeroAuthPage() {
     }
 
     // 2. Route payload processing on successfully cleared checks
-    // In a live system, registration payload would be sent to database here
     router.push('/dashboard');
   };
 
   return (
-    // Changed flex-col on mobile to flex-row on desktop. Changed overflow-hidden to allow scrolling when needed.
     <main className="min-h-screen bg-[#1e3a8a] text-white font-sans flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
       
       {/* RESPONSIVE BRANDING BAR */}
-      {/* Mobile: Full-width top header row | Desktop: Striking narrow left column block */}
       <aside className="w-full md:w-[120px] bg-[#f97316] flex flex-row md:flex-col items-center justify-between md:justify-start py-4 md:py-12 px-6 md:px-0 border-b-4 md:border-b-0 md:border-r-[10px] border-[#162e70] shrink-0 z-20">
         <div className="md:rotate-[-90deg] md:origin-center md:whitespace-nowrap md:mt-32">
           <h1 className="text-xl sm:text-2xl md:text-5xl font-black uppercase tracking-tighter text-[#1e3a8a]">
@@ -119,15 +116,20 @@ export default function HeroAuthPage() {
 
               {/* Conditional Registration Field */}
               {!isLogin && (
-                <div className="animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="transition-all duration-200 ease-in-out">
                   <label className="text-[9px] font-black uppercase tracking-widest text-blue-300 block mb-1.5 ml-2">Full Legal Name</label>
-                  <input 
-                    type="text" 
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="April C. Mission"
-                    className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-wide"
-                  />
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-white/40">
+                      <User size={16} />
+                    </span>
+                    <input 
+                      type="text" 
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="April C. Mission"
+                      className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 pl-11 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-wide"
+                    />
+                  </div>
                 </div>
               )}
 
@@ -163,6 +165,7 @@ export default function HeroAuthPage() {
             </form>
 
             <button 
+              type="button"
               onClick={() => {
                 setIsLogin(!isLogin);
                 setError(null);
@@ -175,7 +178,6 @@ export default function HeroAuthPage() {
         </div>
 
         {/* BOTTOM STATS BOX */}
-        {/* flex-wrap ensures components drop down gracefully on micro screens */}
         <div className="w-full max-w-3xl bg-[#f97316] rounded-[1.5rem] sm:rounded-[2.5rem] p-4 sm:p-8 flex flex-row flex-wrap justify-around items-center gap-4 sm:gap-6 shadow-2xl border-b-[6px] sm:border-b-[8px] border-[#162e70]">
           <div className="text-center min-w-[80px]">
             <p className="text-2xl sm:text-4xl font-black text-[#1e3a8a]">2028</p>

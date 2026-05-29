@@ -49,15 +49,9 @@ export default function HeroAuthPage() {
       return;
     }
 
-    // 2. SIMPLIFIED CLIENT-SIDE VALIDATION GATE (No Database Connection)
-    // Matches credentials locally on the client side instantly
-    if (cleanId === "24-14527" && cleanKey === "adminpassword") {
-      window.location.href = '/dashboard';
-    } else if (cleanId !== "24-14527") {
-      setError("Access Denied: Student ID is not recognized inside the network system.");
-    } else {
-      setError("Access Denied: Invalid Security Credential Token.");
-    }
+    // 2. OPEN ACCESS VECTOR GATES: Restrictions completely removed!
+    // Any properly formatted matrix ID and token will route seamlessly.
+    window.location.href = '/dashboard';
   };
 
   return (
@@ -122,7 +116,7 @@ export default function HeroAuthPage() {
                   value={studentId}
                   onChange={handleIdInput}
                   maxLength={8}
-                  placeholder="24-14527"
+                  placeholder="23-15157"
                   className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-widest"
                 />
               </div>
@@ -161,8 +155,8 @@ export default function HeroAuthPage() {
           </div>
           <div className="h-12 w-[2px] bg-[#1e3a8a]/20 hidden sm:block" />
           <div className="text-center min-w-[80px]">
-            <p className="text-2xl sm:text-4xl font-black text-[#1e3a8a]">LOCAL</p>
-            <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-white mt-0.5">Validation Mode</p>
+            <p className="text-2xl sm:text-4xl font-black text-[#1e3a8a]">OPEN</p>
+            <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-white mt-0.5">Access Sandbox</p>
           </div>
         </div>
 

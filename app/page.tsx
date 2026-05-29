@@ -1,16 +1,13 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ArrowRight, ShieldCheck, AlertCircle, User } from 'lucide-react';
+import { ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
 
 export default function HeroAuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [fullName, setFullName] = useState('');
   const [studentId, setStudentId] = useState('');
   const [securityKey, setSecurityKey] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
 
   // Validates the precise XX-XXXXX layout constraint
   const validateStudentId = (id: string) => {
@@ -38,11 +35,6 @@ export default function HeroAuthPage() {
     const cleanKey = securityKey.trim();
 
     // 1. Structural Layout Form Input Validations
-    if (!isLogin && !fullName.trim()) {
-      setError("Transmission failed: Account generation vectors require your Identification Name.");
-      return;
-    }
-
     if (!cleanId || !cleanKey) {
       setError("Transmission failed: All authorization vectors required.");
       return;
@@ -58,17 +50,16 @@ export default function HeroAuthPage() {
       return;
     }
 
-    // 2. LIVE FETCH PAYLOAD: Send parameters straight to PostgreSQL API Node
+    // 2. LIVE FETCH PAYLOAD: Send login parameters straight to PostgreSQL API Node
     setLoading(true);
     try {
       const response = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: isLogin ? 'login' : 'register',
+          action: 'login',
           studentId: cleanId,
-          securityKey: cleanKey,
-          fullName: isLogin ? '' : fullName.trim()
+          securityKey: cleanKey
         })
       });
 
@@ -81,16 +72,7 @@ export default function HeroAuthPage() {
         return;
       }
 
-      if (!isLogin) {
-        // Account was safely created inside SQL database!
-        setIsLogin(true);
-        setFullName('');
-        setSecurityKey('');
-        setLoading(false);
-        alert("Registration Successful! Profile loaded directly into your PostgreSQL table. You can now log in.");
-      } else {
-        // Validation successfully cleared. Redirecting directly to the application framework
-      }
+      // Validation successfully cleared. Redirecting directly to the application framework
 
     } catch (err) {
       setError("Transmission Failure: Could not establish connection node with the database API.");
@@ -141,7 +123,7 @@ export default function HeroAuthPage() {
           {/* AUTH CARD INTEGRATION */}
           <div className="max-w-sm sm:max-w-md mx-auto bg-[#162e70] p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[3rem] border-4 sm:border-[6px] border-[#f97316] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
             <h3 className="text-xl sm:text-2xl font-black uppercase italic tracking-tight mb-4 sm:mb-6">
-              {isLogin ? 'Initialize Session' : 'Register Profile'}
+              Initialize Session
             </h3>
             
             <form onSubmit={handleAuth} className="space-y-4 text-left">
@@ -150,26 +132,6 @@ export default function HeroAuthPage() {
                 <div className="bg-red-500/20 border-2 border-red-500 rounded-xl p-4 flex items-start gap-3 text-red-200 text-xs font-bold leading-normal">
                   <AlertCircle size={16} className="shrink-0 mt-0.5 text-red-400" />
                   <span>{error}</span>
-                </div>
-              )}
-
-              {/* Conditional Registration Field */}
-              {!isLogin && (
-                <div className="transition-all duration-200 ease-in-out">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-blue-300 block mb-1.5 ml-2">Full Legal Name</label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-white/40">
-                      <User size={16} />
-                    </span>
-                    <input 
-                      type="text" 
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      disabled={loading}
-                      placeholder="April C. Mission"
-                      className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 pl-11 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-wide disabled:opacity-50"
-                    />
-                  </div>
                 </div>
               )}
 
@@ -203,21 +165,9 @@ export default function HeroAuthPage() {
                 disabled={loading}
                 className="w-full bg-[#f97316] text-[#1e3a8a] py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2 text-xs sm:text-sm disabled:opacity-50"
               >
-                {loading ? 'PROCESSING VECTOR...' : isLogin ? 'BEGIN EXPLORING' : 'CREATE MATRIX PROFILE'} <ArrowRight size={18} />
+                {loading ? 'PROCESSING VECTOR...' : 'BEGIN EXPLORING'} <ArrowRight size={18} />
               </button>
             </form>
-
-            <button 
-              type="button"
-              disabled={loading}
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError(null);
-              }}
-              className="mt-4 sm:mt-6 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-blue-300 hover:text-[#f97316] transition-colors block mx-auto bg-transparent border-none outline-none cursor-pointer disabled:opacity-50"
-            >
-              {isLogin ? "No account yet? Register here" : "Already have an account? Login"}
-            </button>
           </div>
         </div>
 

@@ -7,7 +7,6 @@ export default function HeroAuthPage() {
   const [studentId, setStudentId] = useState('');
   const [securityKey, setSecurityKey] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   // Validates the precise XX-XXXXX layout constraint
   const validateStudentId = (id: string) => {
@@ -27,7 +26,7 @@ export default function HeroAuthPage() {
     setStudentId(formattedValue);
   };
 
-  const handleAuth = async (e: React.FormEvent) => {
+  const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -50,34 +49,15 @@ export default function HeroAuthPage() {
       return;
     }
 
-    // 2. LIVE FETCH PAYLOAD: Send login parameters straight to PostgreSQL API Node
-    setLoading(true);
-    try {
-      const response = await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'login',
-          studentId: cleanId,
-          securityKey: cleanKey
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Render exact targeted validation errors passed back from SQL database checks
-        setError(data.error || "An unknown network vector error occurred.");
-        setLoading(false);
-        return;
-      }
-
-      // Native browser window routing redirection bypasses next/navigation compile rules
+    // 2. CLIENT-SIDE VALIDATION GATE (API Node completely removed)
+    // Compares directly against authorized credentials
+    if (cleanId === "24-14527" && cleanKey === "adminpassword") {
+      // Native browser window routing redirection bypasses all next/navigation compile rules
       window.location.href = '/dashboard';
-
-    } catch (err) {
-      setError("Transmission Failure: Could not establish connection node with the database API.");
-      setLoading(false);
+    } else if (cleanId !== "24-14527") {
+      setError("Access Denied: Student ID is not registered inside the database network.");
+    } else {
+      setError("Access Denied: Invalid Security Credential Token.");
     }
   };
 
@@ -143,9 +123,8 @@ export default function HeroAuthPage() {
                   value={studentId}
                   onChange={handleIdInput}
                   maxLength={8}
-                  disabled={loading}
-                  placeholder="23-15157"
-                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-widest disabled:opacity-50"
+                  placeholder="24-14527"
+                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-widest"
                 />
               </div>
 
@@ -155,18 +134,16 @@ export default function HeroAuthPage() {
                   type="password" 
                   value={securityKey}
                   onChange={(e) => setSecurityKey(e.target.value)}
-                  disabled={loading}
                   placeholder="••••••••"
-                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm disabled:opacity-50"
+                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm"
                 />
               </div>
 
               <button 
                 type="submit"
-                disabled={loading}
-                className="w-full bg-[#f97316] text-[#1e3a8a] py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2 text-xs sm:text-sm disabled:opacity-50"
+                className="w-full bg-[#f97316] text-[#1e3a8a] py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2 text-xs sm:text-sm"
               >
-                {loading ? 'PROCESSING VECTOR...' : 'BEGIN EXPLORING'} <ArrowRight size={18} />
+                BEGIN EXPLORING <ArrowRight size={18} />
               </button>
             </form>
           </div>

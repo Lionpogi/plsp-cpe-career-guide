@@ -10,6 +10,7 @@ export default function HeroAuthPage() {
   const [studentId, setStudentId] = useState('');
   const [securityKey, setSecurityKey] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   // Validates the precise XX-XXXXX layout constraint
@@ -30,33 +31,73 @@ export default function HeroAuthPage() {
     setStudentId(formattedValue);
   };
 
-  const handleAuth = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    // 1. Structural Sanity Validations
+    const cleanId = studentId.trim();
+    const cleanKey = securityKey.trim();
+
+    // 1. Structural Layout Form Input Validations
     if (!isLogin && !fullName.trim()) {
       setError("Transmission failed: Account generation vectors require your Identification Name.");
       return;
     }
 
-    if (!studentId.trim() || !securityKey.trim()) {
+    if (!cleanId || !cleanKey) {
       setError("Transmission failed: All authorization vectors required.");
       return;
     }
 
-    if (!validateStudentId(studentId)) {
+    if (!validateStudentId(cleanId)) {
       setError("Invalid Protocol: Student ID must conform to 'XX-XXXXX' format (e.g., 23-15157).");
       return;
     }
 
-    if (securityKey.length < 6) {
+    if (cleanKey.length < 6) {
       setError("Access Denied: Security keys must meet minimum 6-character length.");
       return;
     }
 
-    // 2. Route payload processing on successfully cleared checks
-    router.push('/dashboard');
+    // 2. LIVE FETCH PAYLOAD: Send parameters straight to PostgreSQL API Node
+    setLoading(true);
+    try {
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: isLogin ? 'login' : 'register',
+          studentId: cleanId,
+          securityKey: cleanKey,
+          fullName: isLogin ? '' : fullName.trim()
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Render exact targeted validation errors passed back from SQL database checks
+        setError(data.error || "An unknown network vector error occurred.");
+        setLoading(false);
+        return;
+      }
+
+      if (!isLogin) {
+        // Account was safely created inside SQL database!
+        setIsLogin(true);
+        setFullName('');
+        setSecurityKey('');
+        setLoading(false);
+        alert("Registration Successful! Profile loaded directly into your PostgreSQL table. You can now log in.");
+      } else {
+        // Validation successfully cleared. Redirecting directly to the application framework
+        router.push('/dashboard');
+      }
+
+    } catch (err) {
+      setError("Transmission Failure: Could not establish connection node with the database API.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -126,8 +167,9 @@ export default function HeroAuthPage() {
                       type="text" 
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
+                      disabled={loading}
                       placeholder="April C. Mission"
-                      className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 pl-11 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-wide"
+                      className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 pl-11 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-wide disabled:opacity-50"
                     />
                   </div>
                 </div>
@@ -140,8 +182,9 @@ export default function HeroAuthPage() {
                   value={studentId}
                   onChange={handleIdInput}
                   maxLength={8}
+                  disabled={loading}
                   placeholder="23-15157"
-                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-widest"
+                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm tracking-widest disabled:opacity-50"
                 />
               </div>
 
@@ -151,26 +194,29 @@ export default function HeroAuthPage() {
                   type="password" 
                   value={securityKey}
                   onChange={(e) => setSecurityKey(e.target.value)}
+                  disabled={loading}
                   placeholder="••••••••"
-                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm"
+                  className="w-full bg-[#1e3a8a] border-2 sm:border-4 border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 font-bold focus:border-[#f97316] outline-none transition-all placeholder:text-white/20 text-xs sm:text-sm disabled:opacity-50"
                 />
               </div>
 
               <button 
                 type="submit"
-                className="w-full bg-[#f97316] text-[#1e3a8a] py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2 text-xs sm:text-sm"
+                disabled={loading}
+                className="w-full bg-[#f97316] text-[#1e3a8a] py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 sm:gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl mt-2 text-xs sm:text-sm disabled:opacity-50"
               >
-                {isLogin ? 'BEGIN EXPLORING' : 'CREATE MATRIX PROFILE'} <ArrowRight size={18} />
+                {loading ? 'PROCESSING VECTOR...' : isLogin ? 'BEGIN EXPLORING' : 'CREATE MATRIX PROFILE'} <ArrowRight size={18} />
               </button>
             </form>
 
             <button 
               type="button"
+              disabled={loading}
               onClick={() => {
                 setIsLogin(!isLogin);
                 setError(null);
               }}
-              className="mt-4 sm:mt-6 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-blue-300 hover:text-[#f97316] transition-colors block mx-auto bg-transparent border-none outline-none cursor-pointer"
+              className="mt-4 sm:mt-6 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-blue-300 hover:text-[#f97316] transition-colors block mx-auto bg-transparent border-none outline-none cursor-pointer disabled:opacity-50"
             >
               {isLogin ? "No account yet? Register here" : "Already have an account? Login"}
             </button>
